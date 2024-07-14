@@ -1,4 +1,4 @@
-# "Minimal" Async Runtime
+# "Minimum" Async Runtime
 
 Take it easy! Asynchronous programming in Rust is actually easy to understand once you get a sense of its philosophy. This repository is used for educational purposes and demonstrates how to build a minimal async runtime from scratch for Rust.
 
@@ -19,7 +19,8 @@ RUST_LOG=INFO cargo run
 
 ## Overview
 
-The executor is designed to schedule and run tasks asynchronously in a single-threaded environment, but you can modify it for a multi-threaded model easily. It uses a task queue and a signaling mechanism to manage task execution and ensure that tasks are processed in order.
+The executor is designed to schedule and run tasks asynchronously in a single-threaded environment, but you can modify it for a multi-threaded model easily.
+It uses a task queue and a signaling mechanism to manage task execution and ensure that tasks are processed in order.
 
 ## Key Components
 
