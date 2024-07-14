@@ -121,7 +121,14 @@ where
             info!("[sub] Polling...");
             let sub_status = task.poll();
             info!("[Subtask status] ready= {:?}", sub_status.is_ready());
-            signal.notify(); // So we can check the main task after any sub task being polled
+        }
+
+        // Poll the main task again to quit ASAP
+        info!("[*MAIN] Polling...");
+        let main_status = future.as_mut().poll(noop_cx);
+        info!("[Main task status] ready= {:?}", main_status.is_ready());
+        if let Poll::Ready(res) = main_status {
+            return res;
         }
 
         info!("[Waiting...]");
