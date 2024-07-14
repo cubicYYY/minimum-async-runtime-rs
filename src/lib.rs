@@ -114,16 +114,14 @@ where
 
         // Poll other tasks
         info!(
-            "[INFO] Ready tasks in queue: {}",
+            "[INFO] Runnable tasks in queue: {}",
             EXECUTOR_QUEUE.lock().unwrap().len()
         );
         while let Some(task) = EXECUTOR_QUEUE.lock().unwrap().pop_front() {
             info!("[sub] Polling...");
             let sub_status = task.poll();
             info!("[Subtask status] ready= {:?}", sub_status.is_ready());
-            if sub_status.is_ready() {
-                signal.notify()
-            };
+            signal.notify(); // So we can check the main task after any sub task being polled
         }
 
         info!("[Waiting...]");

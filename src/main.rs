@@ -19,7 +19,7 @@ async fn long_io(tx: async_channel::Sender<u32>) {
 async fn demo() -> u32 {
     let (s, r) = async_channel::unbounded();
     println!("demo start");
-    
+
     // Simulate a long I/O
     spawn(long_io(s.clone()));
 
