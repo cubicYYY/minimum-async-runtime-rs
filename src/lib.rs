@@ -101,16 +101,16 @@ where
     let noop_waker = waker_fn::waker_fn(|| {});
     let noop_cx = &mut Context::from_waker(&noop_waker);
 
-    // Poll the main task to start
-    info!("[*MAIN] Polling...");
-    let main_status = future.as_mut().poll(noop_cx);
-    info!("[Main task status] ready= {:?}", main_status.is_ready());
-    if let Poll::Ready(res) = main_status {
-        return res;
-    }
-
     loop {
         info!("==== Executor loop ====");
+
+        // Poll the main task to start
+        info!("[*MAIN] Polling...");
+        let main_status = future.as_mut().poll(noop_cx);
+        info!("[Main task status] ready= {:?}", main_status.is_ready());
+        if let Poll::Ready(res) = main_status {
+            return res;
+        }
 
         // Poll other tasks
         info!(
@@ -121,15 +121,9 @@ where
             info!("[sub] Polling...");
             let sub_status = task.poll();
             info!("[Subtask status] ready= {:?}", sub_status.is_ready());
+            signal.notify();
         }
 
-        // Check if the main task finished
-        info!("[*MAIN] Polling...");
-        let main_status = future.as_mut().poll(noop_cx);
-        info!("[Main task status] ready= {:?}", main_status.is_ready());
-        if let Poll::Ready(res) = main_status {
-            break res;
-        }
         info!("[Waiting...]");
         signal.wait();
     }
