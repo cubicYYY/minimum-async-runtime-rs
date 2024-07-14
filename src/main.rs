@@ -19,6 +19,9 @@ async fn long_io(tx: async_channel::Sender<u32>) {
 async fn demo() -> u32 {
     let (s, r) = async_channel::unbounded();
     println!("demo start");
+    
+    // Simulate a long I/O
+    spawn(long_io(s.clone()));
 
     let universe = what_universe_is().await;
     println!("The universe equals to: {universe}");
@@ -37,8 +40,6 @@ async fn demo() -> u32 {
     let recv_num = r.recv().await.unwrap();
     println!("Received: {recv_num}");
 
-    // Simulate a long I/O
-    spawn(long_io(s.clone()));
     let recv_num = r.recv().await.unwrap();
     println!("Received: {recv_num}");
 

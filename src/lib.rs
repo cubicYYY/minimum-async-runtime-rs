@@ -121,7 +121,9 @@ where
             info!("[sub] Polling...");
             let sub_status = task.poll();
             info!("[Subtask status] ready= {:?}", sub_status.is_ready());
-            signal.notify();
+            if sub_status.is_ready() {
+                signal.notify()
+            };
         }
 
         info!("[Waiting...]");
